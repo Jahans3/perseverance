@@ -38,6 +38,7 @@ Expected output:
 2. Run `npm install`
 3. Fill in a set of instructions inside the `input.txt` file
 4. Run `npm start` to execute the simulation
+5. Output will be printed to the console and stored in `output.txt`
 
 ## Testing
 
