@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from "fs";
 // initial position (x, y) and initial direction (N, S, E, W)
 // a series of instructions ('L', 'R', 'F')
 
-const inputFile = readFileSync("./input.txt", "utf-8");
+const inputFile = readFileSync("./input-test.txt", "utf-8");
 
 export function validateBounds(bounds: string) {
   if (bounds === "" || !bounds.match(/^\d+ \d+$/)) {
@@ -46,6 +46,7 @@ export function rotateRight(bearing: string) {
 
 function updateCoordinates(boundX: number, boundY: number, isLost: boolean) {
   return (x: number, y: number, bearing: string) => {
+    console.log({ x, y, isLost, bearing });
     switch (bearing) {
       case "N": {
         if (y + 1 > boundY) isLost = true;
@@ -68,6 +69,8 @@ function updateCoordinates(boundX: number, boundY: number, isLost: boolean) {
         break;
       }
     }
+
+    return { x, y, isLost };
   };
 }
 
@@ -81,12 +84,12 @@ export function moveRobot(
   const boundX = parseInt(maxX);
   const boundY = parseInt(maxY);
 
-  const update = updateCoordinates(boundX, boundY, false);
-
   let x = parseInt(initialX);
   let y = parseInt(initialY);
   let bearing = initialDirection;
   let isLost = false;
+
+  const update = updateCoordinates(boundX, boundY, isLost);
 
   for (let i = 0; i < movementInstructions.length; i++) {
     const instruction = movementInstructions[i];
@@ -96,7 +99,7 @@ export function moveRobot(
     } else if (instruction === "R") {
       bearing = rotateRight(bearing);
     } else if (instruction === "F") {
-      update(x, y, bearing);
+      ({ x, y, isLost } = update(x, y, bearing));
     }
 
     if (isLost) {
