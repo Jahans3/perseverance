@@ -25,5 +25,11 @@ describe("perseverance", () => {
     expect(() => main(validInput)).not.toThrow();
   });
   it("should produce the expected output for a valid instruction set", () => {});
-  it("should report when a robot is lost", () => {});
+  it("should report when a robot is lost", () => {
+    const validInput = `5 3
+    3 2 N
+    FRRFLLFFRRFLL`;
+
+    expect(main(validInput)).toEqual("3 3 N LOST");
+  });
 });

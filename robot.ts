@@ -165,8 +165,12 @@ export function main(input: string) {
     output = `${output}\n${moveRobot(bounds, initialPosition, movementInstructions, scents)}`;
   }
 
-  writeFileSync("./output.txt", output.trim());
-  console.log(output.trim());
+  const trimmedOutput = output.trim();
+
+  writeFileSync("./output.txt", trimmedOutput);
+  console.log(trimmedOutput);
+
+  return trimmedOutput;
 }
 
 main(inputFile);
