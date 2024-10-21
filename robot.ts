@@ -5,10 +5,16 @@ import { readFileSync } from "fs";
 // initial position (x, y) and initial direction (N, S, E, W)
 // a series of instructions ('L', 'R', 'F')
 
-function main() {
-  const [bounds, ...instructions] = readFileSync("./input.txt", "utf-8").split(
-    "\n",
-  );
+const inputFile = readFileSync("./input.txt", "utf-8");
+
+export function main(input: string) {
+  const [bounds, ...instructions] = input.split("\n");
+
+  if (bounds === "" || !bounds.match(/^\d+ \d+$/)) {
+    throw new Error(
+      "The first line of the input must be a set of positive coordinates. E.g. '5 3'",
+    );
+  }
   console.log({
     bounds,
     instructions,
@@ -16,4 +22,4 @@ function main() {
   });
 }
 
-main();
+main(inputFile);
