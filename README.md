@@ -5,7 +5,7 @@ Perseverance is a mars robot simulator that takes in a string of commands repres
 - the starting position of the robot (x,y coordinates)
 - a set of directional commands for the robot to represent turns and forward movement (left/L, right/R, forward/F)
 
-Using the above instruction set, Perseverance will output it's final position in the form of x,y coordinates and a bearing (N, E, S, W).
+Using the above instruction set, Perseverance will output its final position in the form of x,y coordinates and a bearing (N, E, S, W).
 
 #### Example Input + Output
 
