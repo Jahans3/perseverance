@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
 // Take input:
 // upper-right bounds of world (x, y)
@@ -32,8 +32,84 @@ export function validateInstructionSet(
   }
 }
 
+const directions = ["N", "E", "S", "W"];
+
+export function rotateLeft(bearing: string) {
+  const index = directions.indexOf(bearing);
+  return directions[(index + 3) % 4];
+}
+
+export function rotateRight(bearing: string) {
+  const index = directions.indexOf(bearing);
+  return directions[(index + 1) % 4];
+}
+
+function updateCoordinates(boundX: number, boundY: number, isLost: boolean) {
+  return (x: number, y: number, bearing: string) => {
+    switch (bearing) {
+      case "N": {
+        if (y + 1 > boundY) isLost = true;
+        else y++;
+        break;
+      }
+      case "E": {
+        if (x + 1 > boundX) isLost = true;
+        else x++;
+        break;
+      }
+      case "S": {
+        if (y - 1 < 0) isLost = true;
+        else y--;
+        break;
+      }
+      case "W": {
+        if (x - 1 < 0) isLost = true;
+        else x--;
+        break;
+      }
+    }
+  };
+}
+
+export function moveRobot(
+  bounds: string,
+  initialPosition: string,
+  movementInstructions: string,
+) {
+  const [initialX, initialY, initialDirection] = initialPosition.split(" ");
+  const [maxX, maxY] = bounds.split(" ");
+  const boundX = parseInt(maxX);
+  const boundY = parseInt(maxY);
+
+  const update = updateCoordinates(boundX, boundY, false);
+
+  let x = parseInt(initialX);
+  let y = parseInt(initialY);
+  let bearing = initialDirection;
+  let isLost = false;
+
+  for (let i = 0; i < movementInstructions.length; i++) {
+    const instruction = movementInstructions[i];
+
+    if (instruction === "L") {
+      bearing = rotateLeft(bearing);
+    } else if (instruction === "R") {
+      bearing = rotateRight(bearing);
+    } else if (instruction === "F") {
+      update(x, y, bearing);
+    }
+
+    if (isLost) {
+      return `${x} ${y} ${bearing} LOST`;
+    }
+  }
+
+  return `${x} ${y} ${bearing}`;
+}
+
 export function main(input: string) {
   const [bounds, ...instructions] = input.split("\n");
+  let output = ``;
 
   validateBounds(bounds);
 
@@ -45,12 +121,11 @@ export function main(input: string) {
     const movementInstructions = instructions[i + 1].trim();
 
     validateInstructionSet(initialPosition, movementInstructions);
+
+    output = `${output}\n${moveRobot(bounds, initialPosition, movementInstructions)}`;
   }
 
-  console.log({
-    bounds,
-    instructions,
-  });
+  writeFileSync("./output.txt", output.trim());
 }
 
 main(inputFile);
