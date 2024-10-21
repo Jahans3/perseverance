@@ -168,7 +168,7 @@ export function main(input: string) {
   const trimmedOutput = output.trim();
 
   writeFileSync("./output.txt", trimmedOutput);
-  console.log({ trimmedOutput });
+  console.log(trimmedOutput);
 
   return trimmedOutput;
 }
