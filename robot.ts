@@ -15,10 +15,16 @@ export function main(input: string) {
       "The first line of the input must be a set of positive coordinates. E.g. '5 3'",
     );
   }
+
+  if (!instructions[0].trim().match(/^\d+ \d+ [NSEW]$/)) {
+    throw new Error(
+      "The second line of the input must be a set of positive coordinates followed by a bearing (NSEW)",
+    );
+  }
+
   console.log({
     bounds,
     instructions,
-    a: instructions.findIndex((x) => x === ""),
   });
 }
 
